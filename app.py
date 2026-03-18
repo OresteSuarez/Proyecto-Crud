@@ -74,7 +74,7 @@ def registro():
     Registro de nueva contraseña
     ---
     parameters:
-      - name: body
+    - name: body
       in : body
       required: true
       shema:
