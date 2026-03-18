@@ -22,7 +22,7 @@ def consulta_general():
         description: Lista de registros
     """
     try:
-        conn = conectar('localhost', 'root', '1234', 'gestor_contraseña')
+        conn = conectar('localhost', 'root', '', 'gestor_contraseña')
         cur = conn.cursor()
         cur.execute("SELECT * FROM baul")
         datos = cur.fetchall()
@@ -94,9 +94,10 @@ def registro():
         data = request.get_json()
         plataforma = data['plataforma']
         usuario = data['usuario']
-        clave = bcrypt.hashpw(data['clave'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        clave= data["clave"]
+        #clave = bcrypt.hashpw(data['clave'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-        conn = conectar('localhost', 'root', '1234', 'gestor_contraseña')
+        conn = conectar('localhost', 'root', '', 'gestor_contraseña')
         cur = conn.cursor()
         cur.execute("INSERT INTO baul (plataforma, usuario, clave) VALUES (%s, %s, %s)",
                   (plataforma, usuario, clave))
@@ -124,7 +125,7 @@ def eliminar(codigo):
         description: Registro eliminado exitosamente
     """
     try:
-        conn = conectar('localhost', 'root', '1234', 'gestor_contraseña')
+        conn = conectar('localhost', 'root', '', 'gestor_contraseña')
         cur = conn.cursor()
         cur.execute("DELETE FROM baul WHERE id_baul = %s", (codigo,))
         conn.commit()
@@ -168,7 +169,7 @@ def actualizar(codigo):
         usuario = data['usuario']
         clave = bcrypt.hashpw(data['clave'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-        conn = conectar('localhost', 'root', '1234', 'gestor_contraseña')
+        conn = conectar('localhost', 'root', '', 'gestor_contraseña')
         cur = conn.cursor()
         cur.execute("UPDATE baul SET plataforma = %s, usuario = %s, clave = %s WHERE id_baul = %s",
                   (plataforma, usuario, clave, codigo))
