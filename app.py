@@ -53,10 +53,11 @@ def consulta_individual(codigo):
         description: Registro encontrado
     """
     try:
-        conn = conectar('localhost', 'root', '1234', 'gestor_contraseña')
+        conn = conectar('localhost', 'root', '', 'gestor_contraseña')
         cur = conn.cursor()
-        cur.execute("SELECT * FROM baul WHERE id_baul = '{codigo}'")
-        cur.close
+        cur.execute("SELECT * FROM baul WHERE id_baul = %s", (codigo,))
+        dato = cur.fetchone()
+        cur.close()
         conn.close()
         if dato:
             dato = {'id_baul': dato[0], 'plataforma': dato[1], 'usuario': dato[2], 'clave': dato[3]}
@@ -74,18 +75,18 @@ def registro():
     Registro de nueva contraseña
     ---
     parameters:
-    - name: body
-      in : body
-      required: true
-      shema:
-        type: object
-        properties:
-          plataforma:
-            type: string
-          usuario:
-            type: string
-          clave:
-            type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            plataforma:
+              type: string
+            usuario:
+              type: string
+            clave:
+              type: string
     responses:
       200:
         description: Registro agregado exitosamente
@@ -137,7 +138,7 @@ def eliminar(codigo):
         return jsonify({'mensaje': 'Error'})
     
     #ruta para actualizar registro
-@app.route("/actualizar/<codigo>", methods=['PUT'])
+@app.route("/actualizar/<codigo>", methods=['PUT']) 
 def actualizar(codigo):
     """
     Actualizar un registro por id
